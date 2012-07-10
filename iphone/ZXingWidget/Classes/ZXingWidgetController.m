@@ -51,7 +51,7 @@
 @synthesize overlayView;
 @synthesize oneDMode, showCancel, isStatusBarHidden;
 @synthesize readers;
-
+@synthesize latestImage=_latestImage;
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
   self = [super init];
@@ -368,6 +368,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         return;
     }
     
+    __block ZXingWidgetController *weakSelf = self;
     dispatch_barrier_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer); 
         /*Lock the image buffer*/
@@ -396,6 +397,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         CVPixelBufferUnlockBaseAddress(imageBuffer,0);
         free(free_me);
         
+        weakSelf.latestImage = [UIImage imageWithCGImage:capture];
+    
         CGContextRelease(newContext); 
         CGColorSpaceRelease(colorSpace);
         
