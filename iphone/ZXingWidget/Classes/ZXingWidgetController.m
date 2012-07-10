@@ -364,86 +364,89 @@
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer 
        fromConnection:(AVCaptureConnection *)connection 
 { 
-  if (!decoding) {
-    return;
-  }
-  CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer); 
-  /*Lock the image buffer*/
-  CVPixelBufferLockBaseAddress(imageBuffer,0); 
-  /*Get information about the image*/
-  size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer); 
-  size_t width = CVPixelBufferGetWidth(imageBuffer); 
-  size_t height = CVPixelBufferGetHeight(imageBuffer); 
+    if (!decoding) {
+        return;
+    }
     
-  uint8_t* baseAddress = CVPixelBufferGetBaseAddress(imageBuffer); 
-  void* free_me = 0;
-  if (true) { // iOS bug?
-    uint8_t* tmp = baseAddress;
-    int bytes = bytesPerRow*height;
-    free_me = baseAddress = (uint8_t*)malloc(bytes);
-    baseAddress[0] = 0xdb;
-    memcpy(baseAddress,tmp,bytes);
-  }
-
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); 
-  CGContextRef newContext =
-    CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace,
-                          kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst); 
-
-  CGImageRef capture = CGBitmapContextCreateImage(newContext); 
-  CVPixelBufferUnlockBaseAddress(imageBuffer,0);
-  free(free_me);
-
-  CGContextRelease(newContext); 
-  CGColorSpaceRelease(colorSpace);
-
-  CGRect cropRect = [overlayView cropRect];
-  if (oneDMode) {
-    // let's just give the decoder a vertical band right above the red line
-    cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
-    cropRect.size.width = ONE_D_BAND_HEIGHT;
-    // do a rotate
-    CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
-    capture = [self CGImageRotated90:croppedImg];
-    capture = [self CGImageRotated180:capture];
-    //              UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
-    CGImageRelease(croppedImg);
-    cropRect.origin.x = 0.0;
-    cropRect.origin.y = 0.0;
-    cropRect.size.width = CGImageGetWidth(capture);
-    cropRect.size.height = CGImageGetHeight(capture);
-  }
-
-  // N.B.
-  // - Won't work if the overlay becomes uncentered ...
-  // - iOS always takes videos in landscape
-  // - images are always 4x3; device is not
-  // - iOS uses virtual pixels for non-image stuff
-
-  {
-    float height = CGImageGetHeight(capture);
-    float width = CGImageGetWidth(capture);
-
-    CGRect screen = UIScreen.mainScreen.bounds;
-    float tmp = screen.size.width;
-    screen.size.width = screen.size.height;;
-    screen.size.height = tmp;
-
-    cropRect.origin.x = (width-cropRect.size.width)/2;
-    cropRect.origin.y = (height-cropRect.size.height)/2;
-  }
-  CGImageRef newImage = CGImageCreateWithImageInRect(capture, cropRect);
-  CGImageRelease(capture);
-  UIImage *scrn = [[UIImage alloc] initWithCGImage:newImage];
-  CGImageRelease(newImage);
-  Decoder *d = [[Decoder alloc] init];
-  d.readers = readers;
-  d.delegate = self;
-  cropRect.origin.x = 0.0;  
-  cropRect.origin.y = 0.0;
-  decoding = [d decodeImage:scrn cropRect:cropRect] == YES ? NO : YES;
-  [d release];
-  [scrn release];
+    dispatch_barrier_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer); 
+        /*Lock the image buffer*/
+        CVPixelBufferLockBaseAddress(imageBuffer,0); 
+        /*Get information about the image*/
+        size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer); 
+        size_t width = CVPixelBufferGetWidth(imageBuffer); 
+        size_t height = CVPixelBufferGetHeight(imageBuffer); 
+        
+        uint8_t* baseAddress = CVPixelBufferGetBaseAddress(imageBuffer); 
+        void* free_me = 0;
+        if (true) { // iOS bug?
+            uint8_t* tmp = baseAddress;
+            int bytes = bytesPerRow*height;
+            free_me = baseAddress = (uint8_t*)malloc(bytes);
+            baseAddress[0] = 0xdb;
+            memcpy(baseAddress,tmp,bytes);
+        }
+        
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); 
+        CGContextRef newContext =
+        CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace,
+                              kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst); 
+        
+        CGImageRef capture = CGBitmapContextCreateImage(newContext); 
+        CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+        free(free_me);
+        
+        CGContextRelease(newContext); 
+        CGColorSpaceRelease(colorSpace);
+        
+        CGRect cropRect = [overlayView cropRect];
+        if (oneDMode) {
+            // let's just give the decoder a vertical band right above the red line
+            cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
+            cropRect.size.width = ONE_D_BAND_HEIGHT;
+            // do a rotate
+            CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
+            capture = [self CGImageRotated90:croppedImg];
+            capture = [self CGImageRotated180:capture];
+            //              UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
+            CGImageRelease(croppedImg);
+            cropRect.origin.x = 0.0;
+            cropRect.origin.y = 0.0;
+            cropRect.size.width = CGImageGetWidth(capture);
+            cropRect.size.height = CGImageGetHeight(capture);
+        }
+        
+        // N.B.
+        // - Won't work if the overlay becomes uncentered ...
+        // - iOS always takes videos in landscape
+        // - images are always 4x3; device is not
+        // - iOS uses virtual pixels for non-image stuff
+        
+        {
+            float height = CGImageGetHeight(capture);
+            float width = CGImageGetWidth(capture);
+            
+            CGRect screen = UIScreen.mainScreen.bounds;
+            float tmp = screen.size.width;
+            screen.size.width = screen.size.height;;
+            screen.size.height = tmp;
+            
+            cropRect.origin.x = (width-cropRect.size.width)/2;
+            cropRect.origin.y = (height-cropRect.size.height)/2;
+        }
+        CGImageRef newImage = CGImageCreateWithImageInRect(capture, cropRect);
+        CGImageRelease(capture);
+        UIImage *scrn = [[UIImage alloc] initWithCGImage:newImage];
+        CGImageRelease(newImage);
+        Decoder *d = [[Decoder alloc] init];
+        d.readers = readers;
+        d.delegate = self;
+        cropRect.origin.x = 0.0;  
+        cropRect.origin.y = 0.0;
+        decoding = [d decodeImage:scrn cropRect:cropRect] == YES ? NO : YES;
+        [d release];
+        [scrn release]; 
+    });
 } 
 #endif
 
