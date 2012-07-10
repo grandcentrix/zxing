@@ -143,7 +143,7 @@ static const CGFloat kPadding = 10;
     //		[imageView.image drawAtPoint:cropRect.origin];
 	}
 	
-	CGFloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+	CGFloat white[4] = {1.0f, 1.0f, 1.0f, 0.0f};
 	CGContextSetStrokeColor(c, white);
 	CGContextSetFillColor(c, white);
 	[self drawRect:cropRect inContext:c];
