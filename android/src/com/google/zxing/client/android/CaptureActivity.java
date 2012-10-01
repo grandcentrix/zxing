@@ -153,7 +153,7 @@ public final class CaptureActivity extends Activity implements
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-		showHelpOnFirstLaunch();
+		//showHelpOnFirstLaunch();
 	}
 
 	@Override
