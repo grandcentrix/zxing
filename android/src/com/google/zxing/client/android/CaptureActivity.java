@@ -45,8 +45,6 @@ import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -153,7 +151,7 @@ public final class CaptureActivity extends Activity implements
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-		//showHelpOnFirstLaunch();
+		// showHelpOnFirstLaunch();
 	}
 
 	@Override
@@ -334,12 +332,12 @@ public final class CaptureActivity extends Activity implements
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.capture, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// MenuInflater menuInflater = getMenuInflater();
+	// menuInflater.inflate(R.menu.capture, menu);
+	// return super.onCreateOptionsMenu(menu);
+	// }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
