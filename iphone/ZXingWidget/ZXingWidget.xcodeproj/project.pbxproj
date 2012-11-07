@@ -559,6 +559,8 @@
 		E53459CA119873F3000CB77F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E5345A651198792F000CB77F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		E5345AA21198859A000CB77F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E7A1AABD164ABA7500433B43 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Localizable.strings; sourceTree = "<group>"; };
+		E7A1AAC0164ABA7500433B43 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1023,8 +1025,28 @@
 		E5345D2811999F53000CB77F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E7A1AABB164ABA7500433B43 /* de.lproj */,
+				E7A1AABE164ABA7500433B43 /* en.lproj */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		E7A1AABB164ABA7500433B43 /* de.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				E7A1AABC164ABA7500433B43 /* Localizable.strings */,
+			);
+			name = de.lproj;
+			path = Classes/de.lproj;
+			sourceTree = "<group>";
+		};
+		E7A1AABE164ABA7500433B43 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				E7A1AABF164ABA7500433B43 /* Localizable.strings */,
+			);
+			name = en.lproj;
+			path = Classes/en.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1218,6 +1240,9 @@
 				Japanese,
 				French,
 				German,
+				de,
+				en,
+				es,
 			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* ZXingWidget */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
@@ -1414,6 +1439,25 @@
 			targetProxy = 1D603E4D13E1E010006F4B51 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E7A1AABC164ABA7500433B43 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A1AABD164ABA7500433B43 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E7A1AABF164ABA7500433B43 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A1AAC0164ABA7500433B43 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1D60398E13DF7CAD006F4B51 /* Debug */ = {

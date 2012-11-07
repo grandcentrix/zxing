@@ -135,7 +135,8 @@ static const CGFloat kPadding = 10;
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
   if (displayedMessage == nil) {
-    self.displayedMessage = @"Place a barcode inside the viewfinder rectangle to scan it.";
+    self.displayedMessage = NSLocalizedString(@"Bewegen Sie das Sucherrechteck über den QR Code, um ihn zu scannen.",
+                                              @"Shown in Sucher window");
   }
 	CGContextRef c = UIGraphicsGetCurrentContext();
   
