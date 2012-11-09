@@ -518,4 +518,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   return NO;
 }
 
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskLandscape;
+}
+
 @end
