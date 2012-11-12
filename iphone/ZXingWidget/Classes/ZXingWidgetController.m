@@ -66,6 +66,10 @@
                                                        cancelEnabled:showCancel 
                                                             oneDMode:oneDMode];
     [theOverLayView setDelegate:self];
+      if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+          theOverLayView.cropRect = CGRectMake(215, 150, 400, 400);
+      }
+
     self.overlayView = theOverLayView;
     [theOverLayView release];
   }
@@ -89,9 +93,9 @@
 
 - (void)cancelled {
   [self stopCapture];
-  if (!self.isStatusBarHidden) {
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-  }
+  //if (!self.isStatusBarHidden) {
+    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
+  //}
 
   wasCancelled = YES;
   if (delegate != nil) {
@@ -118,7 +122,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  self.wantsFullScreenLayout = YES;
+  self.wantsFullScreenLayout = NO;
   if ([self soundToPlay] != nil) {
     OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[self soundToPlay], &beepSound);
     if (error != kAudioServicesNoError) {
@@ -130,8 +134,8 @@
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   self.isStatusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
-  if (!isStatusBarHidden)
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+  //if (!isStatusBarHidden)
+    //[[UIApplication sharedApplication] setStatusBarHidden:YES];
 
   decoding = YES;
 
@@ -144,8 +148,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
   [super viewDidDisappear:animated];
-  if (!isStatusBarHidden)
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+  //if (!isStatusBarHidden)
+    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
   [self.overlayView removeFromSuperview];
   [self stopCapture];
 }
@@ -356,6 +360,10 @@
     self.prevLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
   }
   // NSLog(@"prev %p %@", self.prevLayer, self.prevLayer);
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+    CATransform3D transform =  CATransform3DMakeRotation(190.065, 0, 0, 1.0);
+    self.prevLayer.transform =transform;
+    }
   self.prevLayer.frame = self.view.bounds;
   self.prevLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
   [self.view.layer addSublayer: self.prevLayer];
