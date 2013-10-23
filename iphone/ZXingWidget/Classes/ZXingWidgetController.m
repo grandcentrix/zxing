@@ -523,4 +523,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   return NO;
 }
 
+#pragma mark - Public
+
+- (void)reset {
+    decoding = YES;
+}
+
 @end

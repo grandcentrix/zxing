@@ -68,6 +68,8 @@
 - (void)setTorch:(BOOL)status;
 - (BOOL)torchIsOn;
 
+- (void)reset; // call if you want to scan another code with the same controller instance
+
 @end
 
 @protocol ZXingDelegate
