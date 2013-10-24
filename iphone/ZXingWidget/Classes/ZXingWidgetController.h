@@ -60,6 +60,7 @@
 @property (nonatomic, retain) NSURL *soundToPlay;
 @property (nonatomic, retain) ParsedResult *result;
 @property (nonatomic, retain) OverlayView *overlayView;
+@property (nonatomic, assign) BOOL hideStatusBar;
 
 - (id)initWithDelegate:(id<ZXingDelegate>)delegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode;
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode showLicense:(BOOL)shouldShowLicense;

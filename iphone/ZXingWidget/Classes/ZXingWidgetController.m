@@ -139,7 +139,7 @@
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   self.isStatusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
-  if (!isStatusBarHidden)
+  if (!isStatusBarHidden && self.hideStatusBar)
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
   decoding = YES;
